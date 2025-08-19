@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Monitor de Chamados GLPI",
+  "version": "1.1",
+  "description": "Monitora novos chamados no GLPI e emite um alerta sonoro.",
+  "permissions": [
+    "storage",
+    "alarms",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "*://*/apirest.php/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options.html",
+  "action": {
+    "default_title": "Configurações do Monitor GLPI",
+    "default_icon": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png"
+    }
+  },
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  }
+}
