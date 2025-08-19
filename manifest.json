@@ -6,7 +6,8 @@
   "permissions": [
     "storage",
     "alarms",
-    "offscreen"
+    "offscreen",
+    "notifications"
   ],
   "host_permissions": [
     "*://*/apirest.php/*"

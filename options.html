@@ -1,38 +1,119 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Configurações do Monitor GLPI</title>
     <style>
-        body { font-family: sans-serif; padding: 10px; width: 400px; }
-        div { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; }
-        input { width: 95%; padding: 8px; }
-        input[type=number] { width: 100px; }
-        button { padding: 10px 15px; cursor: pointer; }
-        #status { margin-top: 15px; font-weight: bold; }
+        :root {
+            --background-color: #f4f7f9; --card-color: #ffffff; --font-color: #333;
+            --primary-color: #007bff; --primary-hover-color: #0056b3; --border-color: #dde4e9;
+            --input-background: #f9fafb; --switch-off-color: #ccc; --switch-on-color: #28a745;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background-color); color: var(--font-color);
+            margin: 0; padding: 20px; display: flex; justify-content: center;
+        }
+        .container {
+            width: 500px; background-color: var(--card-color); padding: 30px;
+            border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        h1 {
+            font-size: 24px; margin-top: 0; margin-bottom: 25px;
+            text-align: center; color: var(--primary-color);
+        }
+        .form-group { margin-bottom: 20px; }
+        label {
+            display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;
+        }
+        .input-wrapper { position: relative; }
+        input[type="text"], input[type="password"], input[type="number"], select {
+            width: 100%; padding: 10px; border: 1px solid var(--border-color);
+            border-radius: 6px; background-color: var(--input-background);
+            box-sizing: border-box; transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input:focus, select:focus {
+            outline: none; border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+        }
+        .token-toggle {
+            position: absolute; right: 10px; top: 50%;
+            transform: translateY(-50%); cursor: pointer; color: #888;
+        }
+        .interval-group { display: flex; gap: 10px; align-items: center; }
+        .interval-group select { flex-basis: 120px; }
+        .interval-group .custom-time { flex-grow: 1; }
+        button {
+            width: 100%; padding: 12px; font-size: 16px; font-weight: bold;
+            color: #fff; background-color: var(--primary-color); border: none;
+            border-radius: 6px; cursor: pointer; transition: background-color 0.2s;
+        }
+        button:hover { background-color: var(--primary-hover-color); }
+        #status {
+            margin-top: 20px; font-weight: bold; text-align: center; color: var(--primary-color);
+        }
+        /* Estilos do Toggle Switch */
+        .switch-container { display: flex; align-items: center; justify-content: space-between; }
+        .switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--switch-off-color); transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--switch-on-color); }
+        input:checked + .slider:before { transform: translateX(26px); }
     </style>
 </head>
 <body>
-    <h1>Configurações do GLPI</h1>
-    <div>
-        <label for="glpiUrl">URL do GLPI (ex: http://suaempresa.com/glpi)</label>
-        <input type="text" id="glpiUrl">
-    </div>
-    <div>
-        <label for="appToken">App-Token</label>
-        <input type="text" id="appToken">
-    </div>
-    <div>
-        <label for="userToken">User-Token</label>
-        <input type="text" id="userToken">
-    </div>
-    <div>
-        <label for="checkInterval">Intervalo de verificação (em minutos, ex: 0.5 para 30s)</label>
-        <input type="number" id="checkInterval" min="0.5" step="0.1" value="0.5">
-    </div>
-    <button id="save">Salvar</button>
-    <div id="status"></div>
+    <div class="container">
+        <h1>Configurações do Monitor GLPI</h1>
+        
+        <div class="form-group">
+            <label for="glpiUrl">URL do GLPI</label>
+            <input type="text" id="glpiUrl" placeholder="http://suaempresa.com/glpi">
+        </div>
+        <div class="form-group">
+            <label for="appToken">App-Token</label>
+            <div class="input-wrapper">
+                <input type="password" id="appToken">
+                <span class="token-toggle" id="toggleAppToken">👁️</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="userToken">User-Token</label>
+            <div class="input-wrapper">
+                <input type="password" id="userToken">
+                <span class="token-toggle" id="toggleUserToken">👁️</span>
+            </div>
+        </div>
 
+        <div class="form-group">
+            <label>Intervalo de verificação</label>
+            <div class="interval-group">
+                <select id="intervalUnit">
+                    <option value="seconds">Segundos</option>
+                    <option value="minutes">Minutos</option>
+                </select>
+                <select id="predefinedTime"></select>
+                <input type="number" id="customTime" class="custom-time">
+            </div>
+        </div>
+
+        <div class="form-group switch-container">
+            <label for="showNotifications">Exibir notificação em popup</label>
+            <label class="switch">
+                <input type="checkbox" id="showNotifications">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <button id="save">Salvar</button>
+        <div id="status"></div>
+    </div>
     <script src="options.js"></script>
 </body>
 </html>
