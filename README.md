@@ -9,4 +9,4 @@ Principais Funcionalidades:
 - Alerta sonoro para novos chamados detectados.
 - Notificação de desktop com o título do chamado e um link para abri-lo diretamente no GLPI.
 
-<img width="599" height="618" alt="image" src="https://github.com/user-attachments/assets/53353669-d813-4491-bc09-9b30827c59d7"/>
+<img width="599" height="618" alt="image" src="https://github.com/user-attachments/assets/53353669-d813-4491-bc09-9b30827c59d7"/> <img width="362" height="130" alt="image" src="https://github.com/user-attachments/assets/9f2bc61d-3992-4659-a78c-e668403091a1"/>
